@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  mqtt-bridge:
+    build:
+      context: bridge/mqtt
+      dockerfile: Dockerfile.mosquitto
+    container_name: mqtt-bridge
+    hostname: mqtt-bridge
+    ports:
+      - "1883:1883"
+      - "8883:8883"
+    restart: unless-stopped
+
+  mqtt-publisher:
+    build:
+      context: bridge/mqtt-publisher
+      dockerfile: Dockerfile.publisher
+    container_name: mqtt-publisher
+    env_file:
+      - bridge/mqtt-publisher/.env
+    hostname: mqtt-publisher
+    depends_on:
+      - mqtt-bridge
+    command: python run.py
+    restart: unless-stopped

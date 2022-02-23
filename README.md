@@ -1,3 +1,5 @@
+Make sure to run `docker-compose up -d` before you run `yarn install && yarn start`.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
