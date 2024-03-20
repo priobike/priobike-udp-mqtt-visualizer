@@ -163,14 +163,46 @@
       });
 
       map.addLayer({
+        "id": "sgs-ps-label",
+        "source": "sgs",
+        "type": "symbol",
+        "layout": {
+          "text-field": "PS",
+          "text-size": 10,
+          "text-anchor": "left",
+          "text-offset": [1.5, 1.75],
+          "text-rotation-alignment": "map",
+        },
+        "paint": {
+          "text-color": "black",
+        }
+      });
+
+      map.addLayer({
+        "id": "sgs-p-label",
+        "source": "sgs",
+        "type": "symbol",
+        "layout": {
+          "text-field": "P",
+          "text-size": 10,
+          "text-anchor": "left",
+          "text-offset": [1.5, -1.75],
+          "text-rotation-alignment": "map",
+        },
+        "paint": {
+          "text-color": "black",
+        }
+      });
+
+      map.addLayer({
         "id": "sgs-name-label",
         "source": "sgs",
         "type": "symbol",
         "layout": {
           "text-field": "{n}",
           "text-size": 10,
-          "text-anchor": "center",
-          "text-offset": [3, 0],
+          "text-anchor": "left",
+          "text-offset": [1.5, 0],
           "text-rotation-alignment": "map",
         },
         "paint": {
