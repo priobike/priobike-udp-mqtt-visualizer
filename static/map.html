@@ -1,0 +1,166 @@
+<!-- Basic HTML file-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v3.0.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <title>Visualizer</title>
+
+    <style>
+      html {
+        color: #1a1a1a;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      #map {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map-container" style="position: relative;">
+      <div id="map"></div>
+    </div>
+  </body>
+
+  <script src='mapbox.js'></script>
+  <script>
+    let map;
+    let minimap;
+    let tb;
+
+    const emptyFeatureCollection = {
+      type: "geojson",
+      data: { type: "FeatureCollection", features: [] },
+    };
+
+    mapboxgl.accessToken =
+      "pk.eyJ1Ijoic25ybXR0aHMiLCJhIjoiY2w0ZWVlcWt5MDAwZjNjbW5nMHNvN3kwNiJ9.upoSvMqKIFe3V_zPt1KxmA";
+    map = new mapboxgl.Map({
+      container: "map",
+      // Dresden
+      center: [13.737262, 51.050407],
+      zoom: 12,
+      pitch: 50,
+      bearing: 0,
+      interactive: true,
+      antialias: true,
+      style: "mapbox://styles/paulpickhardt/clskczfvv00cz01qugsppg91b",
+    });
+
+    map.on("style.load", () => {
+      map.setConfigProperty("basemap", "lightPreset", "day");
+      map.setFog({ color: "#a0c6e8", "horizon-blend": 1 });
+    });
+
+    map.on("load", () => {
+      map.addSource("sgs", emptyFeatureCollection);
+
+      map.addLayer({
+        "id": "sgs",
+        "source": "sgs",
+        "type": "circle",
+        "paint": {
+          "circle-radius": 10,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "black",
+          "circle-color": [
+            "match",
+            ["get", "a"],
+            0, "black",
+            1, "rgb(195, 0, 0)",
+            2, "#ffc107",
+            3, "#28a745",
+            4, "#ff8400",
+            5, "#ffff00",
+            6, "#2bff00",
+            9, "#dd00ff",
+            "grey"
+          ],
+        }
+      });
+
+      map.addLayer({
+        "id": "sgs-ps",
+        "source": "sgs",
+        "type": "circle",
+        "paint": {
+          "circle-translate": [5, -20],
+          "circle-radius": 5,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "black",
+          "circle-color": [
+            "match",
+            ["get", "ps"],
+            0, "black",
+            1, "rgb(195, 0, 0)",
+            2, "#ffc107",
+            3, "#28a745",
+            4, "#ff8400",
+            5, "#ffff00",
+            6, "#2bff00",
+            9, "#dd00ff",
+            "grey"
+          ],
+        }
+      });
+
+      map.addLayer({
+        "id": "sgs-p",
+        "source": "sgs",
+        "type": "circle",
+        "paint": {
+          "circle-translate": [-5, -20],
+          "circle-radius": 5,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "black",
+          "circle-color": [
+            "match",
+            ["get", "p"],
+            0, "black",
+            1, "rgb(195, 0, 0)",
+            2, "#ffc107",
+            3, "#28a745",
+            4, "#ff8400",
+            5, "#ffff00",
+            6, "#2bff00",
+            9, "#dd00ff",
+            "grey"
+          ],
+        }
+      });
+
+      map.addLayer({
+        "id": "sgs-name-label",
+        "source": "sgs",
+        "type": "symbol",
+        "layout": {
+          "text-field": "{n}",
+          "text-size": 10,
+          "text-anchor": "center",
+          "text-offset": [0, 1.75],
+        },
+        "paint": {
+          "text-color": "black",
+        }
+      });
+
+      // Every second, get the data from the API.
+      setInterval(() => {
+        fetch('map.geojson')
+          .then(response => response.json())
+          .then(featurecollection => {
+            console.log(featurecollection);
+            map.getSource("sgs").setData(featurecollection);
+          });
+      }, 1000);
+    });
+  </script>
+</html>
