@@ -36,6 +36,11 @@
     let minimap;
     let tb;
 
+    // Get the showPredictor GET var
+    const urlParams = new URLSearchParams(window.location.search);
+    const showPredictor = urlParams.get('showPredictor');
+    console.log(showPredictor);
+
     const emptyFeatureCollection = {
       type: "geojson",
       data: { type: "FeatureCollection", features: [] },
@@ -117,33 +122,34 @@
         }
       });
 
-      map.addLayer({
-        "id": "sgs-p",
-        "source": "sgs",
-        "type": "circle",
-        "paint": {
-          "circle-translate": [0, -20],
-          "circle-translate-anchor": "map",
-          "circle-pitch-alignment": "map",
-          "circle-scale-alignment": "map",
-          "circle-radius": 10,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "black",
-          "circle-color": [
-            "match",
-            ["get", "p"],
-            0, "black",
-            1, "rgb(195, 0, 0)",
-            2, "#ffc107",
-            3, "#28a745",
-            4, "#ff8400",
-            5, "#ffff00",
-            6, "#2bff00",
-            9, "#dd00ff",
-            "grey"
-          ],
-        }
-      });
+      if (showPredictor === 'true')
+        map.addLayer({
+          "id": "sgs-p",
+          "source": "sgs",
+          "type": "circle",
+          "paint": {
+            "circle-translate": [0, -20],
+            "circle-translate-anchor": "map",
+            "circle-pitch-alignment": "map",
+            "circle-scale-alignment": "map",
+            "circle-radius": 10,
+            "circle-stroke-width": 1,
+            "circle-stroke-color": "black",
+            "circle-color": [
+              "match",
+              ["get", "p"],
+              0, "black",
+              1, "rgb(195, 0, 0)",
+              2, "#ffc107",
+              3, "#28a745",
+              4, "#ff8400",
+              5, "#ffff00",
+              6, "#2bff00",
+              9, "#dd00ff",
+              "grey"
+            ],
+          }
+        });
 
       map.addLayer({
         "id": "sgs-at-label",
@@ -178,21 +184,22 @@
         }
       });
 
-      map.addLayer({
-        "id": "sgs-p-label",
-        "source": "sgs",
-        "type": "symbol",
-        "layout": {
-          "text-field": "P",
-          "text-size": 10,
-          "text-anchor": "left",
-          "text-offset": [1.5, -1.75],
-          "text-rotation-alignment": "map",
-        },
-        "paint": {
-          "text-color": "black",
-        }
-      });
+      if (showPredictor === 'true')
+        map.addLayer({
+          "id": "sgs-p-label",
+          "source": "sgs",
+          "type": "symbol",
+          "layout": {
+            "text-field": "P",
+            "text-size": 10,
+            "text-anchor": "left",
+            "text-offset": [1.5, -1.75],
+            "text-rotation-alignment": "map",
+          },
+          "paint": {
+            "text-color": "black",
+          }
+        });
 
       map.addLayer({
         "id": "sgs-name-label",
@@ -215,7 +222,6 @@
         fetch('map.geojson')
           .then(response => response.json())
           .then(featurecollection => {
-            console.log(featurecollection);
             map.getSource("sgs").setData(featurecollection);
           });
       }, 1000);
