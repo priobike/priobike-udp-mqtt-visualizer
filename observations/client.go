@@ -97,34 +97,6 @@ func processMessage(msg mqtt.Message) {
 			return
 		}
 		currentPrimarySignal.Store(thingName, &observation)
-	case "signal_program":
-		thingName, ok := things.SignalProgramDatastreams.Load(topic)
-		if !ok {
-			atomic.AddUint64(&ObservationsDiscarded, 1)
-			return
-		}
-		currentSignalProgram.Store(thingName, &observation)
-	case "detector_car":
-		thingName, ok := things.CarDetectorDatastreams.Load(topic)
-		if !ok {
-			atomic.AddUint64(&ObservationsDiscarded, 1)
-			return
-		}
-		currentCarDetector.Store(thingName, &observation)
-	case "detector_bike":
-		thingName, ok := things.BikeDetectorDatastreams.Load(topic)
-		if !ok {
-			atomic.AddUint64(&ObservationsDiscarded, 1)
-			return
-		}
-		currentBikeDetector.Store(thingName, &observation)
-	case "cycle_second":
-		thingName, ok := things.CycleSecondDatastreams.Load(topic)
-		if !ok {
-			atomic.AddUint64(&ObservationsDiscarded, 1)
-			return
-		}
-		currentCycleSecond.Store(thingName, &observation)
 	}
 
 	atomic.AddUint64(&ObservationsProcessed, 1)

@@ -33,28 +33,12 @@ var DatastreamMqttTopics = &sync.Map{}
 // A map that points `primary_signal` Datastream MQTT topics to Thing names.
 var PrimarySignalDatastreams = &sync.Map{}
 
-// A map that points `signal_program` Datastream MQTT topics to Thing names.
-var SignalProgramDatastreams = &sync.Map{}
-
-// A map that points `cycle_second` Datastream MQTT topics to Thing names.
-var CycleSecondDatastreams = &sync.Map{}
-
-// A map that points `detector_car` Datastream MQTT topics to Thing names.
-var CarDetectorDatastreams = &sync.Map{}
-
-// A map that points `detector_bike` Datastream MQTT topics to Thing names.
-var BikeDetectorDatastreams = &sync.Map{}
-
 func syncThingsPage(page int) (more bool) {
 	elementsPerPage := 100
 	pageUrl := env.SensorThingsBaseUrl + "Things?" + url.QueryEscape(
 		"$filter="+
 			"Datastreams/properties/serviceName eq 'HH_STA_traffic_lights' "+
-			"and (Datastreams/properties/layerName eq 'primary_signal' "+
-			"  or Datastreams/properties/layerName eq 'signal_program' "+
-			"  or Datastreams/properties/layerName eq 'cycle_second' "+
-			"  or Datastreams/properties/layerName eq 'detector_car' "+
-			"  or Datastreams/properties/layerName eq 'detector_bike') "+
+			"and (Datastreams/properties/layerName eq 'primary_signal') "+
 			"and (properties/laneType eq 'Radfahrer' "+
 			"  or properties/laneType eq 'KFZ/Radfahrer' "+
 			"  or properties/laneType eq 'Fußgänger/Radfahrer' "+
@@ -100,18 +84,6 @@ func syncThingsPage(page int) (more bool) {
 			case "primary_signal":
 				DatastreamMqttTopics.Store(d.MqttTopic(), "primary_signal")
 				PrimarySignalDatastreams.Store(d.MqttTopic(), t.Name)
-			case "signal_program":
-				DatastreamMqttTopics.Store(d.MqttTopic(), "signal_program")
-				SignalProgramDatastreams.Store(d.MqttTopic(), t.Name)
-			case "cycle_second":
-				DatastreamMqttTopics.Store(d.MqttTopic(), "cycle_second")
-				CycleSecondDatastreams.Store(d.MqttTopic(), t.Name)
-			case "detector_car":
-				DatastreamMqttTopics.Store(d.MqttTopic(), "detector_car")
-				CarDetectorDatastreams.Store(d.MqttTopic(), t.Name)
-			case "detector_bike":
-				DatastreamMqttTopics.Store(d.MqttTopic(), "detector_bike")
-				BikeDetectorDatastreams.Store(d.MqttTopic(), t.Name)
 			}
 		}
 	}
@@ -145,9 +117,6 @@ func SyncThings() {
 		if !foundMore {
 			break
 		}
-
-		// TODO Remove this debugging break
-		break
 	}
 
 	log.Info.Println("Synced things.")

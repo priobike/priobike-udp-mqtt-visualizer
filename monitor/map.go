@@ -68,8 +68,10 @@ func WriteGeoJSONMap() {
 		}
 		if currentPrimarySignalOk {
 			properties["a"] = currentPrimarySignal.Result
+			properties["at"] = int(time.Since(currentPrimarySignal.PhenomenonTime).Seconds())
 		} else {
 			properties["a"] = phases.Unknown
+			properties["at"] = -1
 		}
 
 		// Make a point feature.

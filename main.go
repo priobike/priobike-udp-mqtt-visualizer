@@ -10,7 +10,6 @@ import (
 func main() {
 	things.SyncThings()
 
-	observations.PrefetchMostRecentObservations()
 	observations.ConnectObservationListener()
 	go observations.CheckReceivedMessagesPeriodically()
 

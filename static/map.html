@@ -45,10 +45,9 @@
       "pk.eyJ1Ijoic25ybXR0aHMiLCJhIjoiY2w0ZWVlcWt5MDAwZjNjbW5nMHNvN3kwNiJ9.upoSvMqKIFe3V_zPt1KxmA";
     map = new mapboxgl.Map({
       container: "map",
-      // Dresden
-      center: [13.737262, 51.050407],
-      zoom: 12,
-      pitch: 50,
+      center: [9.993682, 53.551086],
+      zoom: 14,
+      pitch: 0,
       bearing: 0,
       interactive: true,
       antialias: true,
@@ -69,8 +68,11 @@
         "type": "circle",
         "paint": {
           "circle-radius": 10,
-          "circle-stroke-width": 2,
+          "circle-stroke-width": 1,
           "circle-stroke-color": "black",
+          "circle-translate-anchor": "map",
+          "circle-pitch-alignment": "map",
+          "circle-scale-alignment": "map",
           "circle-color": [
             "match",
             ["get", "a"],
@@ -92,9 +94,12 @@
         "source": "sgs",
         "type": "circle",
         "paint": {
-          "circle-translate": [5, -20],
-          "circle-radius": 5,
-          "circle-stroke-width": 2,
+          "circle-translate": [0, 20],
+          "circle-translate-anchor": "map",
+          "circle-pitch-alignment": "map",
+          "circle-scale-alignment": "map",
+          "circle-radius": 10,
+          "circle-stroke-width": 1,
           "circle-stroke-color": "black",
           "circle-color": [
             "match",
@@ -117,9 +122,12 @@
         "source": "sgs",
         "type": "circle",
         "paint": {
-          "circle-translate": [-5, -20],
-          "circle-radius": 5,
-          "circle-stroke-width": 2,
+          "circle-translate": [0, -20],
+          "circle-translate-anchor": "map",
+          "circle-pitch-alignment": "map",
+          "circle-scale-alignment": "map",
+          "circle-radius": 10,
+          "circle-stroke-width": 1,
           "circle-stroke-color": "black",
           "circle-color": [
             "match",
@@ -138,6 +146,23 @@
       });
 
       map.addLayer({
+        "id": "sgs-at-label",
+        "source": "sgs",
+        "type": "symbol",
+        "layout": {
+          "text-field": "{at}",
+          "text-size": 12,
+          "text-anchor": "center",
+          "text-offset": [0, 0],
+          "text-rotation-alignment": "map",
+          "text-font": ["Open Sans Bold","Arial Unicode MS Regular"],
+        },
+        "paint": {
+          "text-color": "white",
+        }
+      });
+
+      map.addLayer({
         "id": "sgs-name-label",
         "source": "sgs",
         "type": "symbol",
@@ -145,7 +170,8 @@
           "text-field": "{n}",
           "text-size": 10,
           "text-anchor": "center",
-          "text-offset": [0, 1.75],
+          "text-offset": [3, 0],
+          "text-rotation-alignment": "map",
         },
         "paint": {
           "text-color": "black",

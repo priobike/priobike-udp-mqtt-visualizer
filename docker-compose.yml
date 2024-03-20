@@ -4,7 +4,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    env_file: .env
+    env_file: .env.hamburg
     volumes:
       # Mount a volume under the shared nginx dir to serve static files
       - ./static/:/usr/share/nginx/html/
